@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+{% block content %}
+    <div class="row"  style="margin-left: 3%; margin-right: 7%; margin-bottom: 5%;">
+         <div class="col-sm-11">
+             <h1>Client List</h1>
+         </div>
+         <div class="col-sm-1">
+             <a href="{% url 'client-create' %}" >
+                <button type="button" class="btn btn-success"style="margin-right:100">
+                    <span class="glyphicon glyphicon-pencil">Create</span>
+                </button>
+            </a>
+         </div>
+    </div>
+
+    {% if client_list %}
+        {% for client in client_list %}
+            <div class="row">
+                <div class="col-md-1 col-xs-1 col-sm-1"></div>
+                <div class="col-md-7 col-xs-7 col-sm-7">
+                    <ul class="list-group">
+
+                        <li class="list-group-item ">
+
+                            <div style="font-size: 14pt; line-height: 250%; font-weight: bold">{{ client.first_name }} {{client.last_name}}</div>
+                            <div>{{ client.address }}</div>
+                            <div>{{ client.date_of_birth }}</div>
+                            <div>{{ client.zodiac }}</div>
+                        </li>
+                    </ul>
+                    <br>
+                </div>
+                <div class="col-md-1">
+                    <a href="{% url 'client-update' client.pk %}">
+                        <button type="button" class="btn btn-info">
+                            <span class="glyphicon glyphicon-pencil">Edit</span>
+                        </button>
+                    </a>
+                </div>
+                <div class="col-md-1">
+                     <button type="button" class="btn btn-danger" onclick="document.getElementById('client-{{ client.pk }}-form').submit();">
+                         <form id="client-{{ client.pk }}-form" method="post" action="{% url 'client-delete' client.pk %}">
+                            {% csrf_token %}
+                        </form>
+                         <span class="glyphicon glyphicon-trash">Delete</span>
+                     </button>
+                </div>
+                <div class="col-md-1 col-xs-1 col-sm-1"></div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="col-md-7 col-xs-7 col-sm-7">
+            <p>There are no clients.</p>
+        </div>
+    {% endif %}
+{% endblock %}
